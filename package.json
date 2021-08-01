@@ -1,0 +1,22 @@
+{
+  "name": "wegame-pixi",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack"
+  },
+  "devDependencies": {
+    "@pixi/unsafe-eval": "^6.0.4",
+    "@types/node": "^16.4.9",
+    "@types/wegame-api": "^2.8.1",
+    "copy-webpack-plugin": "^9.0.1",
+    "pixi.js": "^6.0.4",
+    "reflect-metadata": "^0.1.13",
+    "ts-loader": "^9.2.4",
+    "typescript": "^4.3.5",
+    "webpack": "^5.47.1",
+    "webpack-cli": "^4.7.2",
+    "webpackbar": "^5.0.0-3"
+  }
+}
