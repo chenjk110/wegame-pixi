@@ -4,7 +4,7 @@ const WebpackBar = require('webpackbar')
 const path = require('path')
 const { DefinePlugin } = require('webpack')
 
-const getBaseCofnig = () => {
+const getBaseConfig = () => {
   try {
     return require('./config')
   } catch (err) {
@@ -27,7 +27,7 @@ const getLocalConfig = () => {
   }
 }
 
-const getConfig = () => Object.assign(getBaseCofnig(), getLocalConfig())
+const getConfig = () => Object.assign(getBaseConfig(), getLocalConfig())
 
 /**
  * @type {import('webpack').Configuration}
@@ -35,14 +35,27 @@ const getConfig = () => Object.assign(getBaseCofnig(), getLocalConfig())
 const config = {
   mode: 'production',
   entry: './src/game.ts',
-  cache: true,
+  cache: {
+    type: 'filesystem',
+    cacheDirectory: path.resolve(__dirname, '.cache/webpack')
+  },
+  target: 'web',
   output: {
+    clean: {
+      keep: (filename)=> {
+        if (filename === 'project.config.json') {
+          return true
+        }
+        return false
+      },
+      dry: true,
+    },
     path: __dirname + '/dist',
     filename: 'game.js',
-    clean: true,
+    libraryTarget: 'commonjs2',
     globalObject: 'GameGlobal',
   },
-  // devtool: 'cheap-source-map',
+  devtool: 'source-map',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -118,7 +131,7 @@ const config = {
         }
       ]
     }),
-    new WebpackBar(),
+    new WebpackBar({}),
     new DefinePlugin({
       'self': 'GameGlobal',
       'window': 'GameGlobal',
