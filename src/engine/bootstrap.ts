@@ -1,6 +1,6 @@
-import './weapp-adapter.js';
+import './weapp-adapter.js'
 
-import { ShaderSystem } from '@pixi/core';
-import { install } from '@pixi/unsafe-eval';
+import { ShaderSystem } from '@pixi/core'
+import { install } from '@pixi/unsafe-eval'
 
-install({ ShaderSystem });
+install({ ShaderSystem })
