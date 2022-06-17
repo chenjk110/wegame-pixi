@@ -1,4 +1,4 @@
-import './bootstrap'
-export * from './decorators'
+import './bootstrap';
+export * from './decorators';
 
-export default {}
+export default {};
