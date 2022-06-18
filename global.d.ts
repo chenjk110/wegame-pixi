@@ -1,29 +1,30 @@
 declare module '*.png' {
-    export default {} as any
+    export default string
 }
 declare module '*.jpg' {
-    export default {} as any
+    export default string
 }
 declare module '*.jpeg' {
-    export default {} as any
+    export default string
 }
 declare module '*.gif' {
-    export default {} as any
+    export default string
 }
 declare module '*.bmp' {
-    export default {} as any
+    export default string
 }
 declare module '*.mp3' {
-    export default {} as any
+    export default string
 }
 declare module '*.aac' {
-    export default {} as any
+    export default string
 }
 declare module '*.wav' {
-    export default {} as any
+    export default string
 }
 declare module '*.wave' {
-    export default {} as any
+    export default string
 }
 
-declare const GameGlobal: any
+// eslint-disable-next-line no-unused-vars
+declare const GameGlobal: wx

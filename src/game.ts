@@ -1,4 +1,4 @@
-import { image } from '@engine'
+import { image, texture } from '@engine'
 
 import { Container, Renderer, Sprite, Texture, Ticker } from 'pixi.js'
 
@@ -16,13 +16,17 @@ const renderer = new Renderer({
 Ticker.shared.add(() => renderer.render(stage))
 
 class AssetsImage {
-    @image static Bullet: string = 'bullet.png'
+    @image('bullet.png') static Bullet: string
+}
+
+class AssetsTexture {
+    @texture(AssetsImage.Bullet) static Bullet: Texture
 }
 
 class Bullet extends Sprite {
     constructor() {
         super()
-        this.texture = Texture.from(AssetsImage.Bullet)
+        this.texture = AssetsTexture.Bullet
     }
 }
 

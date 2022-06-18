@@ -1,32 +1,8 @@
+// @ts-check
 const Copy = require('copy-webpack-plugin')
 const WebpackBar = require('webpackbar')
-const path = require('path')
 const { DefinePlugin } = require('webpack')
-
-const getBaseConfig = () => {
-    try {
-        return require('./config')
-    } catch (err) {
-        if (process.env.NODE_ENV === 'development') {
-            console.warn(`local config.js file not found.`)
-            console.warn(
-                `please creating config.js file at '${__dirname}' and setup info requried.`
-            )
-        }
-        return {
-            game: {},
-            project: {}
-        }
-    }
-}
-
-const getLocalConfig = () => {
-    try {
-        return require('./config.local')
-    } catch (err) {
-        return {}
-    }
-}
+const { getBaseConfig, getLocalConfig, resolve } = require('./utils')
 
 const getConfig = () => Object.assign(getBaseConfig(), getLocalConfig())
 
@@ -34,11 +10,11 @@ const getConfig = () => Object.assign(getBaseConfig(), getLocalConfig())
  * @type {import('webpack').Configuration}
  */
 const config = {
-    mode: 'production',
-    entry: './src/game.ts',
+    mode: 'none',
+    entry: resolve('src/game.ts'),
     cache: {
         type: 'filesystem',
-        cacheDirectory: path.resolve(__dirname, '.cache/webpack')
+        cacheDirectory: resolve('.cache/webpack')
     },
     target: 'web',
     output: {
@@ -51,7 +27,8 @@ const config = {
             },
             dry: true
         },
-        path: __dirname + '/dist',
+        publicPath: './',
+        path: resolve('dist'),
         filename: 'game.js',
         libraryTarget: 'commonjs2',
         globalObject: 'GameGlobal'
@@ -59,8 +36,8 @@ const config = {
     devtool: 'source-map',
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, './src'),
-            '@engine': path.resolve(__dirname, './src/engine')
+            '@': resolve('src'),
+            '@engine': resolve('src/engine')
         },
         extensions: ['.ts', '.js', '.json', '.cjs', '.mjs']
     },
@@ -70,14 +47,14 @@ const config = {
                 test: /\.(jpe?g|bmp|gif|png)$/,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'images/[name][ext]'
+                    filename: 'assets/images/[name][ext]'
                 }
             },
             {
                 test: /\.(mp3|wave?|aac)$/,
                 type: 'asset/resource',
                 generator: {
-                    filename: 'audios/[name][ext]'
+                    filename: 'assets/audios/[name][ext]'
                 }
             },
             {
@@ -97,7 +74,7 @@ const config = {
         new Copy({
             patterns: [
                 {
-                    from: './src/project.config.json',
+                    from: resolve('src/project.config.json'),
                     to: 'project.config.json',
                     transform(content) {
                         const { project } = getConfig()
@@ -107,7 +84,7 @@ const config = {
                     }
                 },
                 {
-                    from: './src/game.json',
+                    from: resolve('src/game.json'),
                     to: 'game.json',
                     transform(content) {
                         const { game } = getConfig()
@@ -115,18 +92,10 @@ const config = {
                         Object.assign(config, game)
                         return JSON.stringify(config, null, 2)
                     }
-                },
-                {
-                    from: './src/assets',
-                    to: 'assets',
-                    transform(content) {
-                        // TODO
-                        // compressing files
-                        return content
-                    }
                 }
             ]
         }),
+        // @ts-ignore
         new WebpackBar({}),
         new DefinePlugin({
             self: 'GameGlobal',
